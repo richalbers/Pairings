@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<!--
+// File: pairings.html
+-->
+<head>
+	<meta charset="UTF-8">
+	<title>Pairings</title>
+	<link type="text/css" rel="stylesheet" href="pairings.css">
+	<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script> <!-- Dialog box -->
+	<script type="text/javascript" src="pairings.js"></script>
+</head>
+	
+<body>
+	<!-- ============ Heading =========== -->
+	<section id="heading">			
+			<h1>Pairings</h1>
+				
+			<div id="instructions">
+			Instructions:<br>
+			<ol>
+				<li>Select all desired options (except Print All pages!)
+				<li>Print a test page.  Adjust the font size to make the animals are as large as they can be without any of the text in the table cells wrapping.
+				<ul>
+					<li>You can adjust the scale when looking at the print preview
+					<li>or you can zoom the page before printing
+				</ul>
+				<li>When the test print (one page) looks good, check "Print All Pages" and print again.
+			</ol>
+			Note: The team mascots (animals) are easier to find/identify when in printed in color.
+			</div>
+			
+			<label for="selectTotalPlayers">Total Players:</label>
+			<select name="selectTotalPlayers" id="selectTotalPlayers">				
+				<option value="28">28</option>
+				<option value="32">32</option>
+				<option value="36">36</option>
+				<option value="40" selected>40</option>
+				<option value="44">44</option>
+				<option value="48">48</option>
+				<option value="52">52</option>
+			</select><span id="totals">cc</span><br>
+			
+			<label for="selectTeamRepresentation">Represent teams with:</label>
+			<select name="selectTeamRepresentation" id="selectTeamRepresentation">
+				<option value="emojis">animals</option>
+				<option value="numbers">numbers</option>
+				<option value="both" selected>both</option>
+			</select><br>
+
+			<label for="movement">Movement Method:</label>
+			<select name="movement" id="movement">
+				<option value="random" selected>All teams randomly arranged (except last team)</option>
+				<option value="moveE2U">Odd teams stay put / even teams move two tables up</option>
+				<option value="moveE2D">Odd teams stay put / even teams move two tables down</option>
+			</select><br>			
+
+		
+			<label for="endTime">Round one end time:</label>
+			<select name="endTime" id="endTime">
+				<option value="385" >6:25</option>
+				<option value="390">6:30</option>
+				<option value="395">6:35</option>
+				<option value="400">6:40</option>
+				<option value="405" selected>6:45</option>
+				<option value="410">6:50</option>
+				<option value="415">6:55</option>
+			</select><br>
+			
+			<label for="roundLength">Round Length:</label>
+			<select name="roundLength" id="roundLength">
+				<option value="20">20</option>
+				<option value="25">25</option>
+				<option value="30">30</option>
+				<option value="35">35</option>
+				<option value="40" selected>40</option>
+				<option value="45">45</option>
+				<option value="50">50</option>
+				<option value="55">55</option>
+			</select><br>
+
+			<div class="textEntry">
+			<label for"notes">Notes:</label>
+			<textarea name="notes" id="notes">
+* Please be cognizant of the time and try to finish your game before the listed ending time.  
+* Keep track of your wins/losses and total points scored.
+* After round 4, if you've won 3 or more, see Eric or Laura 
+* The teams with the most wins will play in the finals. To the victor goes the glory!  
+			</textarea>
+			</div>
+			
+			<label for "printAll">Print All Pages:</label>
+			<input type="checkbox" id="printAll" name="printAll" value="printAll">
+			&larr; Only check this after you've printed a test page and it looks good!
+
+	</section>
+	
+	<!-- ============ Content Pages =========== -->		
+	<section id="tables">
+	</section>
+	
+</body>
+</html>
+
