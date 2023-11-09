@@ -1,19 +1,15 @@
-// File: seating.js
-// PLAN B
- 
-
 $(document).ready(function() {
 	
 	const emojis = [
 		{ "num": 128018, "desc": "Monkey"},
 		{ "num": 129421, "desc": "Gorilla"},
-		{ "num": 129447, "desc": "Orangutan"},
+		/*{ "num": 129447, "desc": "Orangutan"},*/
 		/*{ "num": 128021, "desc": "Dog"},*/
 		{ "num": 128005, "desc": "Tiger"},		
 		/*{ "num": 128006, "desc": "Leopard"},*/
 		{ "num": 129420, "desc": "Deer"},
 		{ "num": 128042, "desc": "Camel"},		
-		{ "num": 129433, "desc": "Lama"},		
+		/*{ "num": 129433, "desc": "Lama"},*/		
 		/*{ "num": 128024, "desc": "Elephant"},	*/	
 		{ "num": 129423, "desc": "Rhinocerous"},		
 		{ "num": 129428, "desc": "Hedgehog"},		
@@ -26,8 +22,8 @@ $(document).ready(function() {
 		{ "num": 128010, "desc": "Crocodile"},
 		{ "num": 129422, "desc": "Lizard"},
 		{ "num": 128013, "desc": "Snake"},
-		{ "num": 128009, "desc": "Dragon"},
 		{ "num": 129430, "desc": "T-Rex"},
+		{ "num": 128009, "desc": "Dragon"},
 		/*{ "num": 128044, "desc": "Dolphin"},*/
 		{ "num": 128032, "desc": "Fish"},
 		{ "num": 129416, "desc": "Shark"},
@@ -237,10 +233,14 @@ $(document).ready(function() {
 				copyRound(pairings,fromRound,toRound);	//copy previous round
 				shiftRowLeft(pairings[toRound*2+1],2);	//shift 2nd row of round left 2
 			}
-			else if (movement=="random")
+			else if (movement=="randomExLast" || movement == "randomAll") {
+				var omitLast=false;
+				if (movement=="randomExLast")
+					omitLast=true;
 				do {
-					randomize(pairings, toRound);
+					randomize(pairings, toRound, omitLast);
 				} while (checkForRepeats(pairings, toRound) == true); //while their is a repeat pairing, we do it over
+			}
 		}	
 
 		return pairings;
@@ -254,7 +254,7 @@ $(document).ready(function() {
 	
 	//randomly assign teams for round.  round CANNOT be 0. (row 0 must be full);
 	// may create a pairing that is a duplicate of a previous rounds pairings
-	function randomize(pairings, round) {
+	function randomize(pairings, round, omitLast) {
 		var tableCount=pairings[0].length;
 		var teamCount=tableCount*2;
 		
@@ -265,9 +265,12 @@ $(document).ready(function() {
 		}
 		
 		//randomize them (except for last item, always leave it alone)
+		var teamsToRandomize=teamCount;
+		if (omitLast)
+			teamsToRandomize--;
 		for (var swap=0;swap<100;swap++) {
-			var ndx1=Math.floor(Math.random() * (teamCount-1));
-			var ndx2=Math.floor(Math.random() * (teamCount-1));
+			var ndx1=Math.floor(Math.random() * teamsToRandomize);
+			var ndx2=Math.floor(Math.random() * teamsToRandomize);
 			swapTeams(teams,ndx1,ndx2);
 		}
 		
