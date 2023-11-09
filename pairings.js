@@ -1,3 +1,7 @@
+// File: seating.js
+// PLAN B
+ 
+
 $(document).ready(function() {
 	
 	const emojis = [
