@@ -32,7 +32,8 @@
 			</div>
 			
 			<label for="selectTotalPlayers">Total Players:</label>
-			<select name="selectTotalPlayers" id="selectTotalPlayers">				
+			<select name="selectTotalPlayers" id="selectTotalPlayers">	
+				<option value="28">24</option>			
 				<option value="28">28</option>
 				<option value="32">32</option>
 				<option value="36">36</option>
@@ -51,7 +52,8 @@
 
 			<label for="movement">Movement Method:</label>
 			<select name="movement" id="movement">
-				<option value="random" selected>All teams randomly arranged (except last team)</option>
+				<option value="randomExLast" selected>All teams randomly arranged (except last team)</option>
+				<option value="randomAll">All teams randomly arranged</option>
 				<option value="moveE2U">Odd teams stay put / even teams move two tables up</option>
 				<option value="moveE2D">Odd teams stay put / even teams move two tables down</option>
 			</select><br>			
@@ -81,16 +83,16 @@
 			</select><br>
 
 			<div class="textEntry">
-			<label for"notes">Notes:</label>
+			<label for="notes">Notes:</label>
 			<textarea name="notes" id="notes">
 * Please be cognizant of the time and try to finish your game before the listed ending time.  
 * Keep track of your wins/losses and total points scored.
-* After round 4, if you've won 3 or more, see Eric or Laura 
-* The teams with the most wins will play in the finals. To the victor goes the glory!  
+* After round 4, if you've won 3 or more, see the host.
+* Top 4 teams advance to the semi-finals; winners of those matches play in the finals.  
 			</textarea>
 			</div>
 			
-			<label for "printAll">Print All Pages:</label>
+			<label for="printAll">Print All Pages:</label>
 			<input type="checkbox" id="printAll" name="printAll" value="printAll">
 			&larr; Only check this after you've printed a test page and it looks good!
 
@@ -102,4 +104,3 @@
 	
 </body>
 </html>
-
