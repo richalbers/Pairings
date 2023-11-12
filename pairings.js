@@ -1,6 +1,3 @@
-// File: seating.js
-// PLAN B
- 
 
 $(document).ready(function() {
 	
@@ -46,10 +43,10 @@ $(document).ready(function() {
 	var tableCount=Number($("#selectTotalPlayers option:selected").val()) / 4;
 	$("#totals").html(" &nbsp ("+(tableCount*2) + " teams / " + (tableCount) + " tables)");  //e.g. "(16 teams / 8 tables)"
 	
-	var printTeamNumbers=true;
+	var printTeamNumbers=false;
 	var printTeamEmojis=true;
 	var movement=$("#movement option:selected").val()
-	var roundOneEndTime=Number( $("#endTime option:selected").val() );
+	var roundOneStartTime=Number( $("#startTime option:selected").val() );
 	var roundLength=Number( $("#roundLength option:selected").val() );
 	var notes=$("#notes").val().replace(/\n/g, "<br />");
 	var printAllPages=false;
@@ -87,7 +84,7 @@ $(document).ready(function() {
     });
 	
 	$("#endTime").on('click', function (event) { 
-		roundOneEndTime=Number( $("#endTime option:selected").val() );
+		roundOneStartTime=Number( $("#startTime option:selected").val() );
 		makeTables();
     });
 	
@@ -112,7 +109,7 @@ $(document).ready(function() {
 	function makeTables() {
 		//var tableCount=pairings[0].length;
 		var pairings=makePairings(tableCount, movement);
-		tableHtmlCode = makeTableHtml(pairings,printTeamEmojis,printTeamNumbers, roundOneEndTime, roundLength);
+		tableHtmlCode = makeTableHtml(pairings,printTeamEmojis,printTeamNumbers, roundOneStartTime, roundLength);
 		
 		var tablesToPrint=tableCount;
 		if (!printAllPages)
@@ -132,20 +129,20 @@ $(document).ready(function() {
 	//=======================================================================
 	// makes table html code from pairings
 	// returns string with html code that is the table
-	function makeTableHtml(pairings,showEmoji,showNumber,roundOneEndTime, roundLength) {
+	function makeTableHtml(pairings, showEmoji, showNumber, roundOneStartTime, roundLength) {
 		var htmlCode = "<table>\n";
 		
 		var roundCount=pairings.length/2;  //two rows per round
 		var tableCount=pairings[0].length;
-		endTime=roundOneEndTime;
+		endTime=roundOneStartTime+roundLength;
 			
 		//print heading line
-		htmlCode+="<tr><td>Round</td>";
+		htmlCode+="<thead><tr><td>Round</td>";
 		for (var tableNum=0; tableNum<tableCount; tableNum++) {
 			htmlCode+="<td>Table<br>" + (tableNum+1) + "</td>";
 		}
 		htmlCode+="<td>Ending<br>Time</td>";
-		htmlCode+="</tr>";
+		htmlCode+="</tr></thead><tbody>";
 		
 		//print table data
 		for (var roundNum=0; roundNum<roundCount; roundNum++) {
@@ -178,7 +175,7 @@ $(document).ready(function() {
 					
 			htmlCode+="</tr>\n";
 		}
-		htmlCode+="</table>\n";
+		htmlCode+="</tbody></table>\n";
 		
 		return htmlCode;
 	}
