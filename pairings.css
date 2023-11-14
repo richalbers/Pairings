@@ -15,7 +15,7 @@ select {
 	margin-bottom: 3px;
 }
 
-h1 { font-size: 120px; }
+h1 { font-size: 20px; }
 
 #heading {
 	padding: 5px;
@@ -52,7 +52,7 @@ textarea {
 
 #tables h1 { 
 	font-family: sans-serif;
-	zfont-size: 80px;
+	font-size: 120px;
 } 
 
 thead {
