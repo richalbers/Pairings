@@ -1,4 +1,5 @@
 
+
 $(document).ready(function() {
 	
 	const emojis = [
@@ -14,7 +15,6 @@ $(document).ready(function() {
 		/*{ "num": 128024, "desc": "Elephant"},	*/	
 		{ "num": 129423, "desc": "Rhinocerous"},		
 		{ "num": 129428, "desc": "Hedgehog"},		
-		/*{ "num": 129415, "desc": "Bat"},*/		
 		{ "num": 129432, "desc": "Kangaroo"},		
 		{ "num": 128039, "desc": "Penguin"},		
 		{ "num": 129413, "desc": "Eagle"},	
@@ -26,17 +26,19 @@ $(document).ready(function() {
 		{ "num": 129430, "desc": "T-Rex"},
 		{ "num": 128009, "desc": "Dragon"},
 		/*{ "num": 128044, "desc": "Dolphin"},*/
+		{ "num": 128375, "desc": "Spider"},	
+		{ "num": 129410, "desc": "Scorpion"},
 		{ "num": 128032, "desc": "Fish"},
 		{ "num": 129416, "desc": "Shark"},
-		{ "num": 128025, "desc": "Octopus"},	
-		{ "num": 129419, "desc": "Butterfly"},	
+		/*{ "num": 128025, "desc": "Octopus"},	*/
+		/*{ "num": 129419, "desc": "Butterfly"},*/	
 		{ "num": 128027, "desc": "Bug"},	
 		{ "num": 128028, "desc": "Ant"},	
 		{ "num": 128029, "desc": "Bee"},	
-		{ "num": 128030, "desc": "Ladybug"},	
-		{ "num": 128375, "desc": "Spider"},	
-		{ "num": 129410, "desc": "Scorpion"},	
-		{ "num": 129440, "desc": "Microbe"}	
+		{ "num": 128030, "desc": "Ladybug"},
+		{ "num": 129419, "desc": "Butterfly"},
+		{ "num": 129415, "desc": "Bat"},		
+		{ "num": 129440, "desc": "Microbe"}
 	];  
 	 
 
@@ -157,8 +159,10 @@ $(document).ready(function() {
 				var team1=pairings[roundNum*2][tableNum];
 				var team2=pairings[roundNum*2+1][tableNum];
 				if (showEmoji) {	
+					htmlCode+="<span class='emojis'>";
 					htmlCode+=("&#" + emojis[team1].num);
 					htmlCode+=("&#" + emojis[team2].num);
+					htmlCode+="</span>";
 				}
 				if (showEmoji && showNumber)
 					htmlCode+="<br>";
@@ -333,3 +337,4 @@ $(document).ready(function() {
 	}
 	
 }); //.ready
+
