@@ -85,7 +85,7 @@ $(document).ready(function() {
 		makeTables();
     });
 	
-	$("#endTime").on('click', function (event) { 
+	$("#startTime").on('click', function (event) { 
 		roundOneStartTime=Number( $("#startTime option:selected").val() );
 		makeTables();
     });
