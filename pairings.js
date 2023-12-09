@@ -14,8 +14,9 @@ $(document).ready(function() {
 		/*{ "num": 129433, "desc": "Lama"},*/		
 		/*{ "num": 128024, "desc": "Elephant"},	*/	
 		{ "num": 129423, "desc": "Rhinocerous"},		
-		{ "num": 129428, "desc": "Hedgehog"},		
-		{ "num": 129432, "desc": "Kangaroo"},		
+		/*{ "num": 129428, "desc": "Hedgehog"},*/		
+		{ "num": 129432, "desc": "Kangaroo"},
+		{ "num": 128641, "desc": "Helicopter"},
 		{ "num": 128039, "desc": "Penguin"},		
 		{ "num": 129413, "desc": "Eagle"},	
 		/*{ "num": 129414, "desc": "Duck"},*/
