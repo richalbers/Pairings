@@ -24,8 +24,8 @@ h1 { font-size: 20px; }
 	border-radius: 5px;
 }
 
-#instructions {
-	width: 500px;
+#emojiSelection {
+	width: 350px;
 	float: right;
 	border: 1px solid black;
 	margin-left: 5px;
@@ -55,11 +55,11 @@ textarea {
 	font-size: 120px;
 } 
 
-thead {
+#tables thead {
 	font-size: 22px;
 }
 
-tbody {
+#tables tbody {
 	font-size: 22px
 }
 
@@ -67,7 +67,7 @@ tbody {
 	font-size: 30px;
 }
 
-table, th, td {
+#tables table, #tables th, #tables td {
 	border: 1px solid black;
 	border-collapse: collapse;
 	padding: 0px;
@@ -99,9 +99,6 @@ table, th, td {
 		font-family: sans-serif;
 		font-size: 150px;
 	} 
-	
-}
-
 	
 }
 
