@@ -1,48 +1,50 @@
 
-
 $(document).ready(function() {
 	
-	const emojis = [
+	const emojisAll = [
 		{ "num": 128018, "desc": "Monkey"},
 		{ "num": 129421, "desc": "Gorilla"},
-		/*{ "num": 129447, "desc": "Orangutan"},*/
+		{ "num": 129447, "desc": "Orangutan"},
 		/*{ "num": 128021, "desc": "Dog"},*/
 		{ "num": 128005, "desc": "Tiger"},		
-		/*{ "num": 128006, "desc": "Leopard"},*/
+		{ "num": 128006, "desc": "Leopard"},
+		{ "num": 128017, "desc": "Wolf/Sheep"},	
 		{ "num": 129420, "desc": "Deer"},
 		{ "num": 128042, "desc": "Camel"},		
-		/*{ "num": 129433, "desc": "Lama"},*/		
-		/*{ "num": 128024, "desc": "Elephant"},	*/	
-		{ "num": 129423, "desc": "Rhinocerous"},		
-		/*{ "num": 129428, "desc": "Hedgehog"},*/		
-		{ "num": 129432, "desc": "Kangaroo"},
-		{ "num": 128641, "desc": "Helicopter"},
-		{ "num": 128039, "desc": "Penguin"},		
+		{ "num": 129433, "desc": "Lama"},		
+		/*{ "num": 128024, "desc": "Elephant"},*/		
+		{ "num": 129423, "desc": "Rhinocerous"},
+		{ "num": 129452, "desc": "Buffalo"},
 		{ "num": 129413, "desc": "Eagle"},	
-		/*{ "num": 129414, "desc": "Duck"},*/
+		{ "num": 129414, "desc": "Duck"},
+		{ "num": 128641, "desc": "Helicopter"},		
+		{ "num": 129430, "desc": "T-Rex"},
+		{ "num": 128009, "desc": "Dragon"},
+		{ "num": 128032, "desc": "Fish"},
+		{ "num": 129416, "desc": "Shark"},		
+		{ "num": 129428, "desc": "Hedgehog"},		
+		{ "num": 129432, "desc": "Kangaroo"},
+		{ "num": 128060, "desc": "Panda"},		
+		{ "num": 128039, "desc": "Penguin"},	
 		{ "num": 129417, "desc": "Owl"},
 		{ "num": 128010, "desc": "Crocodile"},
 		{ "num": 129422, "desc": "Lizard"},
 		{ "num": 128013, "desc": "Snake"},
-		{ "num": 129430, "desc": "T-Rex"},
-		{ "num": 128009, "desc": "Dragon"},
-		/*{ "num": 128044, "desc": "Dolphin"},*/
+		{ "num": 128044, "desc": "Dolphin"},
 		{ "num": 128375, "desc": "Spider"},	
 		{ "num": 129410, "desc": "Scorpion"},
-		{ "num": 128032, "desc": "Fish"},
-		{ "num": 129416, "desc": "Shark"},
-		/*{ "num": 128025, "desc": "Octopus"},	*/
-		/*{ "num": 129419, "desc": "Butterfly"},*/	
+		{ "num": 128025, "desc": "Octopus"},	
+		{ "num": 129419, "desc": "Butterfly"},	
 		{ "num": 128027, "desc": "Bug"},	
 		{ "num": 128028, "desc": "Ant"},	
 		{ "num": 128029, "desc": "Bee"},	
 		{ "num": 128030, "desc": "Ladybug"},
-		{ "num": 129419, "desc": "Butterfly"},
-		{ "num": 129415, "desc": "Bat"},		
-		{ "num": 129440, "desc": "Microbe"}
+		//{ "num": 129419, "desc": "Butterfly"},
+		{ "num": 129415, "desc": "Bat"}		
 	];  
 	 
-
+	var emojis = []; //will hold emojis actually selected
+	
 	var tableCount=Number($("#selectTotalPlayers option:selected").val()) / 4;
 	$("#totals").html(" &nbsp ("+(tableCount*2) + " teams / " + (tableCount) + " tables)");  //e.g. "(16 teams / 8 tables)"
 	
@@ -54,6 +56,8 @@ $(document).ready(function() {
 	var notes=$("#notes").val().replace(/\n/g, "<br />");
 	var printAllPages=false;
 	
+	buildEmojiCheckList();
+	updateSelectedEmojiList();
 	makeTables();
 			
 	// ============================================================================
@@ -108,7 +112,56 @@ $(document).ready(function() {
 			printAllPages=false;
 		makeTables();
     });
+
+	$(".emojiSelectionCheckbox").on('click', function (event) {
+		//alert(event.target.id);
+		//alert($(this).attr('id'));
+		updateSelectedEmojiList();
+		makeTables();
+    });
 	
+	//=========================================================================
+	
+	//-------------------------------------------------------------------------
+	//builds emoji checklist from emojiAll array	
+	function buildEmojiCheckList() {
+		htmlCode="";
+		col=1;
+		colCount=0;
+		for(x=0;x<emojisAll.length;x++) {
+			//htmlCode+="<span class='emojis'>";
+
+			emojiID="Emoji"+x;
+			htmlCode+="<input type='checkbox' id='" + emojiID + "' name='"+emojiID
+			+ "' class='emojiSelectionCheckbox' checked value="+x+" >\n"
+			htmlCode+="<label for='"+ emojiID + "'>&#" + emojisAll[x].num + " " + emojisAll[x].desc + "</label><br>\n";
+			colCount++;
+			if(colCount>=12) {
+				$("#emojiListCol"+col).html(htmlCode);
+				htmlCode="";
+				colCount=0;
+				col++;
+			}
+			//htmlCode+=("&#" + emojis[team1].num);
+			//htmlCode+=("&#" + emojis[team2].num);
+			//htmlCode+="</span>";
+		}
+	}
+	
+	//-------------------------------------------------------------------------
+	//copies all selected emojis to the emoji list used to create tables
+	function updateSelectedEmojiList() {
+		emojis = [];
+		for(x=0;x<emojisAll.length;x++) {
+			emojiID="#Emoji"+x;		
+			if ($(emojiID).is(":checked")) {
+				emojis.push(emojisAll[x]);
+			}
+		}
+	}
+	
+	//-------------------------------------------------------------------------
+	//puts html-formatted tables at end of the page (replacing any that currently exist)
 	function makeTables() {
 		//var tableCount=pairings[0].length;
 		var pairings=makePairings(tableCount, movement);
@@ -129,7 +182,7 @@ $(document).ready(function() {
 	}
 	
 		
-	//=======================================================================
+	//-------------------------------------------------------------------------
 	// makes table html code from pairings
 	// returns string with html code that is the table
 	function makeTableHtml(pairings, showEmoji, showNumber, roundOneStartTime, roundLength) {
