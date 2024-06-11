@@ -191,8 +191,8 @@ $(document).ready(function() {
 	function makeTableHtml(pairings, showEmoji, showNumber, roundOneStartTime, roundLength) {
 		var htmlCode = "<table>\n";
 		
-		var roundCount=pairings.length/2;  //two rows per round
-		var tableCount=pairings[0].length;
+		var roundCount=pairings.length;  
+		var tableCount=pairings[0].length/2;
 		endTime=roundOneStartTime+roundLength;
 			
 		//print heading line
@@ -213,8 +213,8 @@ $(document).ready(function() {
 			//pairings
 			for (var tableNum=0; tableNum<tableCount; tableNum++) {
 				htmlCode+="<td>";
-				var team1=pairings[roundNum*2][tableNum];
-				var team2=pairings[roundNum*2+1][tableNum];
+				var team1=pairings[roundNum][tableNum*2];
+				var team2=pairings[roundNum][tableNum*2+1];
 				if (showEmoji) {	
 					htmlCode+="<span class='emojis'>";
 					htmlCode+=("&#" + emojis[team1].num);
@@ -260,27 +260,24 @@ $(document).ready(function() {
 	// returns 2-D array tables[tableNum][seatNum]
 	function makePairings(tableCount, movement) {
 		// Build a 2-d array to hold players for all rounds
-		// There will be two rows for each round 
-		//     row 0 & 1 are for round 1,
-		//     row 2 & 3 are for round 2, 
-		//     etc..
+		// There will be one row for each round 
+		//     first two entries play at first table, next two next round, etc.
+
+		var teamCount=tableCount*2;
 		var roundCount=4;
-		var rows=roundCount*2;
+		var rows=roundCount;
 		
 		var pairings = new Array(rows);
 		for (var row=0; row<rows; row++) {
-			pairings[row] = new Array(tableCount);
+			pairings[row] = new Array(teamCount);
 		}
 
 		
-		//fill in round 0 (rows 0 & 1) with players in order (team1 vs team2, team3 vs team4, etc..)
+		//fill in round 0 with teams in order 
 		teamNum=0; //first team is team 0, 1 is added when printing
 		row=0;
-		for (var tableNum=0; tableNum<tableCount; tableNum++) {
-			pairings[0][tableNum] = teamNum;
-			teamNum++;
-			pairings[1][tableNum] = teamNum;
-			teamNum++;
+		for (var teamNum=0; teamNum<teamCount; teamNum++) {
+			pairings[0][teamNum] = teamNum;
 		}
 		
 		//for all subsequent rounds, copy previous round and modify as requested
@@ -290,12 +287,13 @@ $(document).ready(function() {
 			
 			if (movement=="moveE2U") {
 				copyRound(pairings,fromRound,toRound); 	//copy previous round
-				shiftRowRight(pairings[toRound*2+1],2);	//shift 2nd row of round right 2
+				shiftOddRight(pairings[toRound],2);	    //shift odd entries in row right 2
 			} else if (movement=="moveE2D") {
 				copyRound(pairings,fromRound,toRound);	//copy previous round
-				shiftRowLeft(pairings[toRound*2+1],2);	//shift 2nd row of round left 2
+				shiftOddLeft(pairings[toRound],2);	    //shift odd entries in row left 2
 			}
 			else if (movement=="randomExLast" || movement == "randomAll") {
+				copyRound(pairings,fromRound,toRound);
 				var omitLast=false;
 				if (movement=="randomExLast")
 					omitLast=true;
@@ -304,7 +302,8 @@ $(document).ready(function() {
 				} while (checkForRepeats(pairings, toRound) == true); //while their is a repeat pairing, we do it over
 			}
 		}	
-
+		
+		//alert(pairings);
 		return pairings;
 	}
 
@@ -317,14 +316,9 @@ $(document).ready(function() {
 	//randomly assign teams for round.  round CANNOT be 0. (row 0 must be full);
 	// may create a pairing that is a duplicate of a previous rounds pairings
 	function randomize(pairings, round, omitLast) {
-		var tableCount=pairings[0].length;
-		var teamCount=tableCount*2;
+		var teamCount=pairings[0].length;
 		
-		//create an array of all the team numbers (0-n) in order
-		var teams = new Array(teamCount); //array of all team numbers
-		for (var team = 0; team<teamCount; team++) {
-			teams[team]=team;
-		}
+		//alert(pairings[round]);
 		
 		//randomize them (except for last item, always leave it alone)
 		var teamsToRandomize=teamCount;
@@ -333,23 +327,20 @@ $(document).ready(function() {
 		for (var swap=0;swap<100;swap++) {
 			var ndx1=Math.floor(Math.random() * teamsToRandomize);
 			var ndx2=Math.floor(Math.random() * teamsToRandomize);
-			swapTeams(teams,ndx1,ndx2);
+			swapTeams(pairings[round],ndx1,ndx2);
 		}
 		
-		//copy random sequence of teams from teams arr to pairings
-		ndx=0; 
-		row=round*2;
-		for (var tableNum=0; tableNum<tableCount; tableNum++) {
-			if (teams[ndx]>teams[ndx+1]) //always make low number team first
-				swapTeams(teams,ndx,ndx+1);
-			pairings[row][tableNum] = teams[ndx];
-			ndx++;
-			pairings[row+1][tableNum] = teams[ndx];
-			ndx++;
+		//arrange teams at each table so low number team is first
+		for (var ndx=0; ndx<teamCount; ndx+=2) {
+			if (pairings[round][ndx]>pairings[round][ndx+1]) //always make low number team first
+				swapTeams(pairings[round],ndx,ndx+1);
 		}
 		
 		//note, current pairings my duplicate some previos pairings!
+		//alert(pairings[round]);
 	}
+	
+
 	
 	//checks if any of the pairings in the current Round are repeat pairings from previous Rounds
 	//returns true if repeat is found
@@ -358,12 +349,16 @@ $(document).ready(function() {
 			return false; //round 0, no previous rounds, no repeats!
 	
 		for(var table=0;table<tableCount;table++) {
-			var currPairing=""+pairings[currRound*2][table]+pairings[currRound*2+1][table];
+			var currPlayer1=pairings[currRound][table*2];
+			var currPlayer2=pairings[currRound][table*2+1];
+			var currPairing=""+currPlayer1+currPlayer2;
 			for (prevRound=0;prevRound<currRound;prevRound++) {
 				for(var t2=0;t2<tableCount;t2++) {
-					var prevPairing=""+pairings[prevRound*2][t2]+pairings[prevRound*2+1][t2];
+					var prevPlayer1=pairings[prevRound][t2*2];
+					var prevPlayer2=pairings[prevRound][t2*2+1];
+					var prevPairing=""+prevPlayer1+prevPlayer2;
 					if (currPairing==prevPairing) {
-						//alert(currPairing+" "+(prevRound+1)+" "+(t2+1));
+						//alert(currPairing+" | "+(prevRound+1)+" | "+(t2+1));
 						return true;
 					}
 				}
@@ -373,25 +368,25 @@ $(document).ready(function() {
 	}
 	
 	function copyRound(pairings,fromRound,toRound) {
-		for (var tableNum=0; tableNum<tableCount; tableNum++) {
-				pairings[toRound*2][tableNum] = pairings[fromRound*2][tableNum]; 
-				pairings[toRound*2+1][tableNum] = pairings[fromRound*2+1][tableNum];
+		for (var ndx=0; ndx<pairings[0].length; ndx++) {
+				pairings[toRound][ndx] = pairings[fromRound][ndx]; 
 			}
 	}
 	
-	function shiftRowLeft(arr, shiftAmt) {
+	function shiftOddLeft(arr, shiftAmt) {
+		shiftAmt*=2;
 		var fromArr=[...arr]; //make a copy of the array
 		var len=arr.length;
-		for (var tableNum=0; tableNum<len; tableNum++) 
-			arr[tableNum] = fromArr[(tableNum+shiftAmt)%len];
+		for (var ndx=0; ndx<len; ndx+=2) 
+			arr[ndx] = fromArr[(ndx+shiftAmt)%len];
 	}
 	
-	function shiftRowRight(arr, shiftAmt) {
+	function shiftOddRight(arr, shiftAmt) {
+		shiftAmt*=2;
 		var fromArr=[...arr]; //make a copy of the array
 		var len=arr.length;
-		for (var tableNum=0; tableNum<len; tableNum++) 
-			arr[(tableNum+shiftAmt)%len] = fromArr[tableNum];
+		for (var ndx=0; ndx<len; ndx+=2) 
+			arr[(ndx+shiftAmt)%len] = fromArr[ndx];
 	}
 	
 }); //.ready
-
