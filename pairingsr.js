@@ -286,11 +286,11 @@ $(document).ready(function() {
 		var htmlCode = "<table>\n";
 		
 		//print heading line
-		htmlCode+="<thead><tr><td>Round</td>";
+		htmlCode+="<thead><tr><td>Rnd</td>";
 		for (var tableNum=0; tableNum<tableCount; tableNum++) {
 			htmlCode+="<td>Table<br>" + (tableNum+1) + "</td>";
 		}
-		htmlCode+="<td>Ending<br>Time</td>";
+		htmlCode+="<td>End<br>Time</td>";
 		htmlCode+="</tr></thead><tbody>";
 		
 		//print table data
@@ -371,4 +371,5 @@ $(document).ready(function() {
 	
 	
 }); //.ready
+
 
